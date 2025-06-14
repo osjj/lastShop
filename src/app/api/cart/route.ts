@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const supabase = await createSupabaseServerClient();
 
@@ -75,8 +75,8 @@ export async function GET(request: NextRequest) {
         brandId: item.product.brand_id,
         stockQuantity: item.product.stock_quantity,
         images: item.product.images
-          ?.sort((a: any, b: any) => a.sort_order - b.sort_order)
-          ?.map((img: any) => img.image_url) || [],
+          ?.sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order)
+          ?.map((img: { image_url: string }) => img.image_url) || [],
         status: item.product.status,
         isFeatured: item.product.is_featured,
         isDigital: item.product.is_digital,
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     const supabase = await createSupabaseServerClient();
 

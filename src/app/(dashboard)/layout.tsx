@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/header';
 import { useAuthStore } from '@/store/auth';
-import { User, Package, Heart, Settings, LogOut } from 'lucide-react';
+import { User, Package, Heart, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 interface DashboardLayoutProps {

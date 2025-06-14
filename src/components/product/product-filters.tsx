@@ -42,7 +42,6 @@ export function ProductFilters({
   priceRange,
   sortBy = 'newest',
   onCategoryChange,
-  onBrandChange,
   onPriceRangeChange,
   onSortChange,
   onClearFilters,
@@ -162,7 +161,7 @@ export function ProductFilters({
                   type="radio"
                   name="priceRange"
                   checked={!priceRange}
-                  onChange={() => onPriceRangeChange?.(undefined as any)}
+                  onChange={() => onPriceRangeChange?.(undefined as [number, number] | undefined)}
                   className="mr-2"
                 />
                 <span className="text-sm text-gray-700">不限价格</span>

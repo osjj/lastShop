@@ -8,12 +8,12 @@ import { Button } from '@/components/ui/button';
 import { useCartStore } from '@/store/cart';
 import { useAuthStore } from '@/store/auth';
 import { API_ROUTES, PAGE_ROUTES } from '@/lib/constants';
-import { CheckoutForm, Address, CheckoutItem } from '@/types';
+import { CheckoutForm, CheckoutItem } from '@/types';
 import { ArrowLeft, CreditCard, Truck, MapPin, FileText, AlertCircle } from 'lucide-react';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, total, itemCount, clearCart } = useCartStore();
+  const { items, total, clearCart } = useCartStore();
   const { isAuthenticated, user, isLoading: authLoading } = useAuthStore();
   
   const [loading, setLoading] = useState(false);

@@ -7,7 +7,7 @@ import { Header } from '@/components/layout/header';
 import { ProductCard } from '@/components/product/product-card';
 import { Product } from '@/types';
 import { API_ROUTES } from '@/lib/constants';
-import { ShoppingBag, Star, Truck, Shield, Headphones, ArrowRight, Sparkles } from 'lucide-react';
+import { ShoppingBag, Truck, Shield, Headphones, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);

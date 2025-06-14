@@ -9,9 +9,9 @@ import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/store/auth';
 import { API_ROUTES, PAGE_ROUTES } from '@/lib/constants';
 import { Order } from '@/types';
-import { 
-  ArrowLeft, Package, MapPin, CreditCard, FileText, 
-  Calendar, CheckCircle, AlertCircle, Truck, Phone, User 
+import {
+  ArrowLeft, Package, MapPin, CreditCard, FileText,
+  CheckCircle, AlertCircle, Truck, Phone, User
 } from 'lucide-react';
 
 const ORDER_STATUS_CONFIG = {
