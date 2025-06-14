@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结账功能修复验证</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+        .success {
+            background-color: #d1fae5;
+            border-color: #a7f3d0;
+            color: #065f46;
+        }
+        .warning {
+            background-color: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        .info {
+            background-color: #dbeafe;
+            border-color: #bfdbfe;
+            color: #1e40af;
+        }
+        .error {
+            background-color: #fee2e2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background-color: #6b7280;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+        }
+        .bank-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .bank-info h3 {
+            color: #1e40af;
+            margin: 0 0 15px 0;
+        }
+        .bank-detail {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e7ff;
+        }
+        .bank-detail:last-child {
+            border-bottom: none;
+        }
+        .bank-detail .label {
+            font-weight: 600;
+            color: #1e40af;
+        }
+        .bank-detail .value {
+            font-family: monospace;
+            color: #1f2937;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            margin: 10px 0;
+            padding: 8px 0;
+            position: relative;
+            padding-left: 30px;
+        }
+        .checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="color: #1f2937; margin-bottom: 10px;">🛒 结账功能修复验证</h1>
+            <p style="color: #6b7280; margin: 0;">银行转账支付方式 + 登录认证修复</p>
+        </div>
+
+        <div class="section success">
+            <h2>✅ 修复内容</h2>
+            <ul class="checklist">
+                <li>只保留银行转账一种支付方式</li>
+                <li>添加完整的银行收款信息展示</li>
+                <li>修复登录认证状态检查</li>
+                <li>改进错误处理和用户提示</li>
+                <li>添加认证加载状态</li>
+            </ul>
+        </div>
+
+        <div class="section info">
+            <h2>🏦 银行收款信息</h2>
+            <div class="bank-info">
+                <h3>ShopNext 收款账户</h3>
+                <div class="bank-detail">
+                    <span class="label">银行名称：</span>
+                    <span class="value">中国工商银行</span>
+                </div>
+                <div class="bank-detail">
+                    <span class="label">账户名称：</span>
+                    <span class="value">ShopNext 电商有限公司</span>
+                </div>
+                <div class="bank-detail">
+                    <span class="label">银行账号：</span>
+                    <span class="value">6222 0202 0000 1234 567</span>
+                </div>
+                <div class="bank-detail">
+                    <span class="label">开户行：</span>
+                    <span class="value">工商银行北京分行营业部</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 测试步骤</h2>
+            
+            <div class="step">
+                <h4>步骤 1: 准备测试环境</h4>
+                <p>确保开发服务器正在运行</p>
+                <button onclick="checkServer()">检查服务器状态</button>
+                <div id="serverStatus" style="margin-top: 10px;"></div>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 2: 测试登录功能</h4>
+                <p>验证用户认证是否正常工作</p>
+                <button onclick="window.open('http://localhost:3001/login', '_blank')">打开登录页面</button>
+                <div class="warning" style="margin-top: 10px; padding: 10px; font-size: 14px;">
+                    💡 如果没有账户，请先注册一个测试账户
+                </div>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 3: 添加商品到购物车</h4>
+                <p>在主页或商品页面添加商品</p>
+                <button onclick="window.open('http://localhost:3001', '_blank')">打开主页</button>
+                <button onclick="window.open('http://localhost:3001/products', '_blank')" class="btn-secondary">商品列表</button>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 4: 测试结账流程</h4>
+                <p>验证银行转账支付方式和订单创建</p>
+                <button onclick="window.open('http://localhost:3001/cart', '_blank')">打开购物车</button>
+                <button onclick="window.open('http://localhost:3001/checkout', '_blank')">直接打开结账页</button>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 5: 验证订单管理</h4>
+                <p>检查订单列表和详情页面</p>
+                <button onclick="window.open('http://localhost:3001/orders', '_blank')">查看订单列表</button>
+            </div>
+        </div>
+
+        <div class="section warning">
+            <h2>⚠️ 注意事项</h2>
+            <ul>
+                <li><strong>登录要求</strong>：必须先登录才能访问结账页面</li>
+                <li><strong>购物车检查</strong>：购物车不能为空</li>
+                <li><strong>地址信息</strong>：必须填写完整的收货地址</li>
+                <li><strong>银行转账</strong>：订单创建后需要手动转账到指定账户</li>
+                <li><strong>订单备注</strong>：建议在备注中填写转账信息</li>
+            </ul>
+        </div>
+
+        <div class="section success">
+            <h2>✅ 预期结果</h2>
+            <ul class="checklist">
+                <li>登录后可以正常访问结账页面</li>
+                <li>结账页面只显示银行转账支付方式</li>
+                <li>显示完整的银行收款信息</li>
+                <li>可以成功创建订单</li>
+                <li>订单状态为"待支付"</li>
+                <li>购物车在下单后被清空</li>
+            </ul>
+        </div>
+
+        <div class="section error">
+            <h2>🐛 常见问题排查</h2>
+            <ul>
+                <li><strong>"请先登录"错误</strong> → 检查登录状态，重新登录</li>
+                <li><strong>页面一直加载</strong> → 检查网络连接和服务器状态</li>
+                <li><strong>订单创建失败</strong> → 检查表单是否填写完整</li>
+                <li><strong>购物车为空</strong> → 先添加商品到购物车</li>
+                <li><strong>认证过期</strong> → 重新登录后再试</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f3f4f6; border-radius: 8px;">
+            <h3 style="color: #1f2937; margin-bottom: 15px;">🚀 开始测试</h3>
+            <p style="color: #6b7280; margin-bottom: 20px;">点击下方按钮开始完整的结账流程测试</p>
+            <button onclick="startTest()" style="font-size: 16px; padding: 15px 30px;">开始完整测试</button>
+        </div>
+    </div>
+
+    <script>
+        function checkServer() {
+            const statusDiv = document.getElementById('serverStatus');
+            statusDiv.innerHTML = '<div style="color: #3b82f6;">检查中...</div>';
+            
+            fetch('http://localhost:3001')
+                .then(response => {
+                    if (response.ok) {
+                        statusDiv.innerHTML = '<div style="color: #10b981;">✅ 服务器运行正常</div>';
+                    } else {
+                        statusDiv.innerHTML = '<div style="color: #ef4444;">❌ 服务器响应异常</div>';
+                    }
+                })
+                .catch(error => {
+                    statusDiv.innerHTML = '<div style="color: #ef4444;">❌ 无法连接到服务器，请确保开发服务器正在运行</div>';
+                });
+        }
+
+        function startTest() {
+            if (confirm('这将打开多个测试页面，确定要开始吗？')) {
+                // 按顺序打开测试页面
+                window.open('http://localhost:3001/login', '_blank');
+                setTimeout(() => {
+                    window.open('http://localhost:3001', '_blank');
+                }, 1000);
+                setTimeout(() => {
+                    window.open('http://localhost:3001/cart', '_blank');
+                }, 2000);
+            }
+        }
+
+        // 页面加载时自动检查服务器状态
+        window.onload = function() {
+            checkServer();
+            console.log('结账功能修复验证页面已加载');
+        };
+    </script>
+</body>
+</html>

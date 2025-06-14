@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ShopNext 购物车功能测试</h1>
+    
+    <div class="test-section info">
+        <h2>测试说明</h2>
+        <p>这个页面用于测试 ShopNext 应用的核心功能：</p>
+        <ul>
+            <li>主页商品点击跳转到商品详情页</li>
+            <li>商品详情页面显示导航头</li>
+            <li>加入购物车功能</li>
+            <li>购物车状态更新</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>测试步骤</h2>
+        <ol>
+            <li>
+                <strong>测试主页商品跳转：</strong>
+                <button onclick="window.open('http://localhost:3001', '_blank')">打开主页</button>
+                <div class="result info">
+                    点击主页中的任意商品卡片，应该能够跳转到商品详情页面
+                </div>
+            </li>
+            
+            <li>
+                <strong>测试商品详情页导航：</strong>
+                <button onclick="window.open('http://localhost:3001/products', '_blank')">打开商品列表</button>
+                <div class="result info">
+                    从商品列表点击任意商品，检查商品详情页是否显示完整的导航头
+                </div>
+            </li>
+            
+            <li>
+                <strong>测试购物车功能：</strong>
+                <button onclick="window.open('http://localhost:3001/cart', '_blank')">打开购物车</button>
+                <div class="result info">
+                    在主页或商品详情页点击"加入购物车"按钮，然后检查购物车页面是否显示添加的商品
+                </div>
+            </li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>预期结果</h2>
+        <div class="success">
+            <h3>✅ 成功标准：</h3>
+            <ul>
+                <li>主页商品卡片可以点击并跳转到对应的商品详情页</li>
+                <li>商品详情页面显示完整的导航头（包括 ShopNext logo、导航菜单、购物车图标等）</li>
+                <li>点击"加入购物车"按钮后，商品成功添加到购物车</li>
+                <li>购物车图标显示正确的商品数量</li>
+                <li>购物车页面显示添加的商品信息</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>故障排除</h2>
+        <div class="error">
+            <h3>⚠️ 如果遇到问题：</h3>
+            <ul>
+                <li>确保开发服务器正在运行（npm run dev）</li>
+                <li>检查浏览器控制台是否有错误信息</li>
+                <li>确保 Supabase 配置正确</li>
+                <li>检查网络连接</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>技术细节</h2>
+        <div class="info">
+            <h3>🔧 修复内容：</h3>
+            <ul>
+                <li><strong>主页商品展示：</strong>将静态商品卡片替换为使用 ProductCard 组件的动态商品</li>
+                <li><strong>商品详情页导航：</strong>为所有状态（加载中、错误、正常）添加 Header 组件</li>
+                <li><strong>购物车功能：</strong>确保 ProductCard 组件正确连接到购物车 store</li>
+                <li><strong>类型安全：</strong>修复 TypeScript 类型定义，确保所有 Product 对象符合接口要求</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 简单的测试辅助函数
+        function checkLocalhost() {
+            if (window.location.hostname !== 'localhost') {
+                alert('请在本地开发环境中运行此测试（localhost）');
+                return false;
+            }
+            return true;
+        }
+
+        // 页面加载时检查
+        window.onload = function() {
+            if (checkLocalhost()) {
+                console.log('ShopNext 测试页面已加载');
+                console.log('请按照测试步骤进行功能验证');
+            }
+        };
+    </script>
+</body>
+</html>

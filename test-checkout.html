@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopNext 结账流程测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f9fafb;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+        .success {
+            background-color: #d1fae5;
+            border-color: #a7f3d0;
+            color: #065f46;
+        }
+        .error {
+            background-color: #fee2e2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+        .info {
+            background-color: #dbeafe;
+            border-color: #bfdbfe;
+            color: #1e40af;
+        }
+        .warning {
+            background-color: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        .btn-secondary {
+            background-color: #6b7280;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+        }
+        .step h4 {
+            margin: 0 0 10px 0;
+            color: #1f2937;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .feature-card h3 {
+            margin: 0 0 10px 0;
+            color: #1f2937;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 2px;
+        }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-paid { background: #d1fae5; color: #065f46; }
+        .status-processing { background: #dbeafe; color: #1e40af; }
+        .status-shipped { background: #e0e7ff; color: #5b21b6; }
+        .status-delivered { background: #d1fae5; color: #065f46; }
+        .status-cancelled { background: #f3f4f6; color: #374151; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #1f2937; margin-bottom: 10px;">🛒 ShopNext 结账流程测试</h1>
+        <p style="text-align: center; color: #6b7280; margin-bottom: 30px;">完整的订单管理系统测试指南</p>
+        
+        <div class="test-section info">
+            <h2>🎯 测试目标</h2>
+            <p>验证完整的结账流程，包括：</p>
+            <ul>
+                <li>用户下单流程（填写地址、选择支付方式、提交订单）</li>
+                <li>订单管理功能（查看订单列表、订单详情）</li>
+                <li>人工审核流程（订单状态管理）</li>
+                <li>用户体验和界面响应</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>📋 测试步骤</h2>
+            
+            <div class="step">
+                <h4>步骤 1: 准备测试数据</h4>
+                <p>首先添加一些商品到购物车</p>
+                <button onclick="window.open('http://localhost:3001', '_blank')">打开主页</button>
+                <button onclick="window.open('http://localhost:3001/products', '_blank')">打开商品列表</button>
+                <div class="result info">
+                    💡 在主页或商品列表页面添加几个商品到购物车，然后进入购物车页面
+                </div>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 2: 进入结账流程</h4>
+                <p>从购物车页面开始结账</p>
+                <button onclick="window.open('http://localhost:3001/cart', '_blank')">打开购物车</button>
+                <div class="result info">
+                    💡 点击购物车中的"立即结账"按钮，如果未登录会跳转到登录页面
+                </div>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 3: 填写订单信息</h4>
+                <p>在结账页面填写完整的订单信息</p>
+                <button onclick="window.open('http://localhost:3001/checkout', '_blank')">直接打开结账页面</button>
+                <div class="result warning">
+                    ⚠️ 需要先登录才能访问结账页面。测试时请填写：
+                    <ul style="margin: 10px 0;">
+                        <li>收货人姓名和电话</li>
+                        <li>完整的收货地址</li>
+                        <li>选择支付方式（推荐选择"人工审核"）</li>
+                        <li>可选的订单备注</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 4: 提交订单</h4>
+                <p>确认信息无误后提交订单</p>
+                <div class="result success">
+                    ✅ 提交成功后应该：
+                    <ul style="margin: 10px 0;">
+                        <li>显示订单创建成功的提示</li>
+                        <li>自动跳转到订单详情页面</li>
+                        <li>购物车被清空</li>
+                        <li>订单状态为"待审核"</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h4>步骤 5: 查看订单</h4>
+                <p>验证订单管理功能</p>
+                <button onclick="window.open('http://localhost:3001/orders', '_blank')">打开订单列表</button>
+                <div class="result info">
+                    💡 检查订单列表是否显示刚创建的订单，点击"查看详情"验证订单信息完整性
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 功能特性验证</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📝 结账页面</h3>
+                    <ul style="font-size: 14px;">
+                        <li>收货地址表单验证</li>
+                        <li>支付方式选择</li>
+                        <li>订单摘要显示</li>
+                        <li>价格计算准确性</li>
+                        <li>响应式设计</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📋 订单列表</h3>
+                    <ul style="font-size: 14px;">
+                        <li>订单状态显示</li>
+                        <li>订单基本信息</li>
+                        <li>快速操作按钮</li>
+                        <li>空状态处理</li>
+                        <li>分页功能（如有多个订单）</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📄 订单详情</h3>
+                    <ul style="font-size: 14px;">
+                        <li>完整商品信息</li>
+                        <li>收货地址详情</li>
+                        <li>支付信息</li>
+                        <li>价格明细</li>
+                        <li>订单操作按钮</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔐 安全性</h3>
+                    <ul style="font-size: 14px;">
+                        <li>用户认证检查</li>
+                        <li>订单权限验证</li>
+                        <li>数据输入验证</li>
+                        <li>库存检查</li>
+                        <li>事务处理</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 订单状态说明</h2>
+            <p>系统支持以下订单状态：</p>
+            <div style="margin: 15px 0;">
+                <span class="status-badge status-pending">待审核</span>
+                <span class="status-badge status-paid">已支付</span>
+                <span class="status-badge status-processing">处理中</span>
+                <span class="status-badge status-shipped">已发货</span>
+                <span class="status-badge status-delivered">已送达</span>
+                <span class="status-badge status-cancelled">已取消</span>
+            </div>
+            
+            <div class="result info">
+                <h4>人工审核流程：</h4>
+                <ol style="margin: 10px 0;">
+                    <li><strong>用户下单</strong> → 订单状态：待审核</li>
+                    <li><strong>人工审核</strong> → 检查库存、地址、联系用户</li>
+                    <li><strong>审核通过</strong> → 订单状态：已支付</li>
+                    <li><strong>准备发货</strong> → 订单状态：处理中</li>
+                    <li><strong>商品发货</strong> → 订单状态：已发货</li>
+                    <li><strong>用户确认</strong> → 订单状态：已送达</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="test-section error">
+            <h2>⚠️ 常见问题排查</h2>
+            <div style="margin: 15px 0;">
+                <h4>如果遇到问题：</h4>
+                <ul>
+                    <li><strong>无法访问结账页面</strong> → 检查是否已登录</li>
+                    <li><strong>购物车为空</strong> → 先添加商品到购物车</li>
+                    <li><strong>订单创建失败</strong> → 检查表单是否填写完整</li>
+                    <li><strong>库存不足</strong> → 选择其他商品或减少数量</li>
+                    <li><strong>页面加载错误</strong> → 检查开发服务器是否运行</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section success">
+            <h2>✅ 预期结果</h2>
+            <p>完成测试后，您应该能够：</p>
+            <ul>
+                <li>✅ 成功创建订单并获得订单号</li>
+                <li>✅ 在订单列表中看到新创建的订单</li>
+                <li>✅ 查看完整的订单详情信息</li>
+                <li>✅ 订单状态正确显示为"待审核"</li>
+                <li>✅ 购物车在下单后被清空</li>
+                <li>✅ 所有页面响应正常，无错误信息</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f3f4f6; border-radius: 8px;">
+            <h3 style="color: #1f2937; margin-bottom: 10px;">🚀 开始测试</h3>
+            <p style="color: #6b7280; margin-bottom: 15px;">点击下方按钮开始完整的结账流程测试</p>
+            <button onclick="window.open('http://localhost:3001', '_blank')" style="margin: 5px;">开始测试</button>
+            <button onclick="window.open('http://localhost:3001/products', '_blank')" class="btn-secondary" style="margin: 5px;">商品页面</button>
+        </div>
+    </div>
+
+    <script>
+        // 简单的测试辅助函数
+        function checkLocalhost() {
+            if (window.location.hostname !== 'localhost') {
+                alert('请在本地开发环境中运行此测试（localhost）');
+                return false;
+            }
+            return true;
+        }
+
+        // 页面加载时检查
+        window.onload = function() {
+            if (checkLocalhost()) {
+                console.log('ShopNext 结账流程测试页面已加载');
+                console.log('请按照测试步骤进行功能验证');
+            }
+        };
+
+        // 添加一些交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有按钮添加点击效果
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
