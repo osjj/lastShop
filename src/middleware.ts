@@ -57,13 +57,14 @@ export async function middleware(request: NextRequest) {
   // If accessing admin route, check for admin role
   if (isAdminRoute && user) {
     try {
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from('user_profiles')
         .select('role')
         .eq('id', user.id)
         .single();
 
-      if (!profile || profile.role !== 'admin') {
+      if (error || !profile || profile.role !== 'admin') {
+        console.error('Admin role check failed:', error);
         return NextResponse.redirect(new URL('/', request.url));
       }
     } catch (error) {

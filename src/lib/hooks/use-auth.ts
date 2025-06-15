@@ -18,7 +18,22 @@ export function useAuth() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
-          await refreshUser();
+          try {
+            await refreshUser();
+          } catch (error) {
+            console.error('Error refreshing user on initial session:', error);
+            // If refresh fails, still set basic user info
+            setUser({
+              id: session.user.id,
+              email: session.user.email!,
+              firstName: '',
+              lastName: '',
+              role: 'customer',
+              status: 'active',
+              createdAt: session.user.created_at,
+              updatedAt: session.user.created_at,
+            });
+          }
         } else {
           setUser(null);
         }
@@ -36,9 +51,24 @@ export function useAuth() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
-        
+
         if (session?.user) {
-          await refreshUser();
+          try {
+            await refreshUser();
+          } catch (error) {
+            console.error('Error refreshing user on auth state change:', error);
+            // If refresh fails, still set basic user info
+            setUser({
+              id: session.user.id,
+              email: session.user.email!,
+              firstName: '',
+              lastName: '',
+              role: 'customer',
+              status: 'active',
+              createdAt: session.user.created_at,
+              updatedAt: session.user.created_at,
+            });
+          }
         } else {
           setUser(null);
         }

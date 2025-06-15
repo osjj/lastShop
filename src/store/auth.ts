@@ -74,8 +74,8 @@ export const useAuthStore = create<AuthStore>()(
                 email: data.user.email!,
                 firstName: profile?.first_name || '',
                 lastName: profile?.last_name || '',
-                phone: profile?.phone,
-                avatarUrl: profile?.avatar_url,
+                phone: profile?.phone || undefined,
+                avatarUrl: profile?.avatar_url || undefined,
                 role: profile?.role || 'customer',
                 status: profile?.status || 'active',
                 createdAt: data.user.created_at,
@@ -110,22 +110,24 @@ export const useAuthStore = create<AuthStore>()(
             if (error) throw error;
 
             if (authData.user) {
-              // Create user profile
+              // Update user profile with additional information
+              // The profile is automatically created by the trigger
+              // Wait a moment for the trigger to complete
+              await new Promise(resolve => setTimeout(resolve, 100));
+
               const { error: profileError } = await supabase
                 .from('user_profiles')
-                .insert({
-                  id: authData.user.id,
+                .update({
                   first_name: data.firstName,
                   last_name: data.lastName,
                   phone: data.phone,
-                  role: 'customer',
-                  status: 'active',
-                });
+                  updated_at: new Date().toISOString(),
+                })
+                .eq('id', authData.user.id);
 
               if (profileError) {
-                console.error('Profile creation error:', profileError);
+                console.error('Profile update error:', profileError);
                 // Don't throw error here as the user is already created
-                // We can create the profile later
               }
 
               const user: User = {
@@ -179,44 +181,61 @@ export const useAuthStore = create<AuthStore>()(
         },
 
         refreshUser: async () => {
-          const { data } = await supabase.auth.getUser();
+          try {
+            const { data } = await supabase.auth.getUser();
 
-          if (data.user) {
-            const { data: profile } = await supabase
-              .from('user_profiles')
-              .select('*')
-              .eq('id', data.user.id)
-              .single();
+            if (data.user) {
+              const { data: profile, error: profileError } = await supabase
+                .from('user_profiles')
+                .select('*')
+                .eq('id', data.user.id)
+                .single();
 
-            const user: User = {
-              id: data.user.id,
-              email: data.user.email!,
-              firstName: profile?.first_name,
-              lastName: profile?.last_name,
-              phone: profile?.phone,
-              avatarUrl: profile?.avatar_url,
-              role: profile?.role || 'customer',
-              status: profile?.status || 'active',
-              createdAt: data.user.created_at,
-              updatedAt: profile?.updated_at || data.user.created_at,
-            };
+              // If profile doesn't exist or there's an error, create a basic user object
+              if (profileError && profileError.code !== 'PGRST116') {
+                console.error('Profile fetch error:', profileError);
+              }
 
-            set(
-              {
-                user,
-                isAuthenticated: true,
-              },
-              false,
-              'auth/refreshUser'
-            );
-          } else {
+              const user: User = {
+                id: data.user.id,
+                email: data.user.email!,
+                firstName: profile?.first_name || '',
+                lastName: profile?.last_name || '',
+                phone: profile?.phone || undefined,
+                avatarUrl: profile?.avatar_url || undefined,
+                role: profile?.role || 'customer',
+                status: profile?.status || 'active',
+                createdAt: data.user.created_at,
+                updatedAt: profile?.updated_at || data.user.created_at,
+              };
+
+              set(
+                {
+                  user,
+                  isAuthenticated: true,
+                },
+                false,
+                'auth/refreshUser'
+              );
+            } else {
+              set(
+                {
+                  user: null,
+                  isAuthenticated: false,
+                },
+                false,
+                'auth/refreshUser/noUser'
+              );
+            }
+          } catch (error) {
+            console.error('Refresh user error:', error);
             set(
               {
                 user: null,
                 isAuthenticated: false,
               },
               false,
-              'auth/refreshUser/noUser'
+              'auth/refreshUser/error'
             );
           }
         },
