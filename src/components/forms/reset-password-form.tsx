@@ -6,7 +6,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth';
-import { resetPasswordSchema, type ResetPasswordFormData } from '@/lib/validations/auth';
+import {
+  resetPasswordSchema,
+  type ResetPasswordFormData,
+} from '@/lib/validations/auth';
 import { Eye, EyeOff, Loader2, CheckCircle } from 'lucide-react';
 
 interface ResetPasswordFormProps {
@@ -49,7 +52,7 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
       setError(null);
       await resetPassword(data.password);
       setIsSuccess(true);
-      
+
       // Redirect to login after 3 seconds
       setTimeout(() => {
         if (onSuccess) {
@@ -66,7 +69,7 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
   // Password strength indicator
   const getPasswordStrength = (password: string) => {
     if (!password) return { score: 0, text: '', color: '' };
-    
+
     let score = 0;
     if (password.length >= 8) score++;
     if (/[a-z]/.test(password)) score++;
@@ -90,22 +93,25 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
 
   if (isSuccess) {
     return (
-      <div className="text-center space-y-6">
-        <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+      <div className="space-y-6 text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
           <CheckCircle className="h-8 w-8 text-green-600" />
         </div>
-        
+
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">
+          <h3 className="text-foreground mb-2 text-lg font-semibold">
             密码重置成功
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             您的密码已成功重置。正在跳转到登录页面...
           </p>
         </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div className="bg-green-600 h-2 rounded-full animate-pulse" style={{ width: '100%' }}></div>
+        <div className="h-2 w-full rounded-full bg-gray-200">
+          <div
+            className="h-2 animate-pulse rounded-full bg-green-600"
+            style={{ width: '100%' }}
+          ></div>
         </div>
       </div>
     );
@@ -114,19 +120,22 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {error && (
-        <div className="p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+        <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-600">
           {error}
         </div>
       )}
 
-      <div className="text-center mb-6">
-        <p className="text-sm text-muted-foreground">
+      <div className="mb-6 text-center">
+        <p className="text-muted-foreground text-sm">
           请输入您的新密码。密码必须包含大小写字母、数字和特殊字符。
         </p>
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
+        <label
+          htmlFor="password"
+          className="text-foreground mb-2 block text-sm font-medium"
+        >
           新密码
         </label>
         <div className="relative">
@@ -134,38 +143,41 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
             {...register('password')}
             type={showPassword ? 'text' : 'password'}
             id="password"
-            className="w-full px-3 py-2 pr-10 border border-input rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+            className="border-input focus:ring-ring w-full rounded-md border px-3 py-2 pr-10 shadow-sm focus:border-transparent focus:ring-2 focus:outline-none"
             placeholder="请输入新密码"
             disabled={isLoading}
           />
           <button
             type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            className="absolute inset-y-0 right-0 flex items-center pr-3"
             onClick={() => setShowPassword(!showPassword)}
             disabled={isLoading}
           >
             {showPassword ? (
-              <EyeOff className="h-4 w-4 text-muted-foreground" />
+              <EyeOff className="text-muted-foreground h-4 w-4" />
             ) : (
-              <Eye className="h-4 w-4 text-muted-foreground" />
+              <Eye className="text-muted-foreground h-4 w-4" />
             )}
           </button>
         </div>
         {password && (
           <div className="mt-2">
             <div className="flex items-center space-x-2">
-              <span className="text-xs text-muted-foreground">密码强度:</span>
+              <span className="text-muted-foreground text-xs">密码强度:</span>
               <span className={`text-xs font-medium ${passwordStrength.color}`}>
                 {passwordStrength.text}
               </span>
             </div>
-            <div className="mt-1 w-full bg-gray-200 rounded-full h-1">
-              <div 
+            <div className="mt-1 h-1 w-full rounded-full bg-gray-200">
+              <div
                 className={`h-1 rounded-full transition-all duration-300 ${
-                  passwordStrength.score <= 1 ? 'bg-red-500' :
-                  passwordStrength.score <= 2 ? 'bg-yellow-500' :
-                  passwordStrength.score <= 3 ? 'bg-blue-500' :
-                  'bg-green-500'
+                  passwordStrength.score <= 1
+                    ? 'bg-red-500'
+                    : passwordStrength.score <= 2
+                      ? 'bg-yellow-500'
+                      : passwordStrength.score <= 3
+                        ? 'bg-blue-500'
+                        : 'bg-green-500'
                 }`}
                 style={{ width: `${(passwordStrength.score / 5) * 100}%` }}
               ></div>
@@ -178,7 +190,10 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
       </div>
 
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-2">
+        <label
+          htmlFor="confirmPassword"
+          className="text-foreground mb-2 block text-sm font-medium"
+        >
           确认新密码
         </label>
         <div className="relative">
@@ -186,25 +201,27 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
             {...register('confirmPassword')}
             type={showConfirmPassword ? 'text' : 'password'}
             id="confirmPassword"
-            className="w-full px-3 py-2 pr-10 border border-input rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+            className="border-input focus:ring-ring w-full rounded-md border px-3 py-2 pr-10 shadow-sm focus:border-transparent focus:ring-2 focus:outline-none"
             placeholder="请再次输入新密码"
             disabled={isLoading}
           />
           <button
             type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            className="absolute inset-y-0 right-0 flex items-center pr-3"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             disabled={isLoading}
           >
             {showConfirmPassword ? (
-              <EyeOff className="h-4 w-4 text-muted-foreground" />
+              <EyeOff className="text-muted-foreground h-4 w-4" />
             ) : (
-              <Eye className="h-4 w-4 text-muted-foreground" />
+              <Eye className="text-muted-foreground h-4 w-4" />
             )}
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+          <p className="mt-1 text-sm text-red-600">
+            {errors.confirmPassword.message}
+          </p>
         )}
       </div>
 
@@ -214,14 +231,7 @@ export function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
         disabled={isLoading || !!error}
         loading={isLoading}
       >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            重置中...
-          </>
-        ) : (
-          '重置密码'
-        )}
+        重置密码
       </Button>
     </form>
   );

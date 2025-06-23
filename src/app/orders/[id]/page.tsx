@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Header } from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { CancelOrderDialog } from '@/components/orders/cancel-order-dialog';
 import { useAuthStore } from '@/store/auth';
 import { API_ROUTES, PAGE_ROUTES } from '@/lib/constants';
 import { Order } from '@/types';
@@ -43,6 +44,7 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -78,6 +80,27 @@ export default function OrderDetailPage() {
 
     fetchOrder();
   }, [isAuthenticated, orderId]);
+
+  const handleCancelSuccess = () => {
+    // Refresh order data
+    const fetchOrder = async () => {
+      if (!isAuthenticated || !orderId) return;
+
+      try {
+        setError(null);
+        const response = await fetch(API_ROUTES.orders.detail(orderId));
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          setOrder(result.data);
+        }
+      } catch (err) {
+        console.error('Failed to refresh order:', err);
+      }
+    };
+
+    fetchOrder();
+  };
 
   if (!isAuthenticated) {
     return null; // Will redirect
@@ -334,8 +357,21 @@ export default function OrderDetailPage() {
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">订单操作</h2>
                 
                 <div className="space-y-3">
-                  {order.status === 'pending' && (
-                    <Button variant="outline" className="w-full">
+                  {order.paymentStatus === 'pending' && (
+                    <Button asChild className="w-full">
+                      <Link href={PAGE_ROUTES.payment(order.id)}>
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        立即支付
+                      </Link>
+                    </Button>
+                  )}
+                  
+                  {order.status === 'pending' && order.paymentStatus === 'pending' && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={() => setShowCancelDialog(true)}
+                    >
                       取消订单
                     </Button>
                   )}
@@ -358,6 +394,17 @@ export default function OrderDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Cancel Order Dialog */}
+      {order && (
+        <CancelOrderDialog
+          orderId={order.id}
+          orderNumber={order.orderNumber}
+          isOpen={showCancelDialog}
+          onClose={() => setShowCancelDialog(false)}
+          onSuccess={handleCancelSuccess}
+        />
+      )}
     </div>
   );
 }

@@ -200,9 +200,23 @@ export default function CheckoutPage() {
         </div>
 
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">结账</h1>
-          <p className="text-gray-600">请填写订单信息并完成银行转账，我们将在确认收款后安排发货</p>
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+            安全结账
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            请填写订单信息并完成银行转账，我们将在确认收款后安排发货
+          </p>
+          <div className="flex items-center justify-center gap-2 mt-3 text-sm text-gray-500">
+            <svg className="h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+            SSL 安全加密 | 信息安全保护
+          </div>
         </div>
 
         {/* Error Message */}
@@ -221,10 +235,15 @@ export default function CheckoutPage() {
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Shipping Address */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <MapPin className="h-5 w-5 text-blue-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">收货地址</h2>
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <MapPin className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">收货地址</h2>
+                    <p className="text-sm text-gray-500">请确认您的收货地址信息</p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -320,42 +339,69 @@ export default function CheckoutPage() {
               </div>
 
               {/* Payment Method - Bank Transfer */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <CreditCard className="h-5 w-5 text-blue-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">支付方式 - 银行转账</h2>
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <CreditCard className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">支付方式</h2>
+                    <p className="text-sm text-gray-500">银行转账 - 安全可靠</p>
+                  </div>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <h3 className="text-sm font-semibold text-blue-900 mb-3">收款银行信息</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-blue-700 font-medium">银行名称：</span>
-                      <span className="text-blue-900">中国工商银行</span>
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-5 mb-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">银</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-blue-700 font-medium">账户名称：</span>
-                      <span className="text-blue-900">ShopNext 电商有限公司</span>
+                    <h3 className="text-lg font-semibold text-blue-900">收款银行信息</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="bg-white/50 rounded-lg p-3">
+                      <span className="text-blue-700 font-medium block mb-1">银行名称</span>
+                      <span className="text-blue-900 font-semibold">中国工商银行</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-blue-700 font-medium">银行账号：</span>
-                      <span className="text-blue-900 font-mono">6222 0202 0000 1234 567</span>
+                    <div className="bg-white/50 rounded-lg p-3">
+                      <span className="text-blue-700 font-medium block mb-1">账户名称</span>
+                      <span className="text-blue-900 font-semibold">ShopNext 电商有限公司</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-blue-700 font-medium">开户行：</span>
-                      <span className="text-blue-900">工商银行北京分行营业部</span>
+                    <div className="bg-white/50 rounded-lg p-3">
+                      <span className="text-blue-700 font-medium block mb-1">银行账号</span>
+                      <span className="text-blue-900 font-mono font-bold text-lg">6222 0202 0000 1234 567</span>
+                    </div>
+                    <div className="bg-white/50 rounded-lg p-3">
+                      <span className="text-blue-700 font-medium block mb-1">开户行</span>
+                      <span className="text-blue-900 font-semibold">工商银行北京分行营业部</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <h4 className="text-sm font-semibold text-yellow-800 mb-2">转账说明</h4>
-                  <ul className="text-sm text-yellow-700 space-y-1">
-                    <li>• 请在转账备注中填写您的订单号（提交订单后获得）</li>
-                    <li>• 转账金额必须与订单总金额完全一致</li>
-                    <li>• 我们将在收到转账后1-2个工作日内确认并安排发货</li>
-                    <li>• 如有疑问，请联系客服：400-123-4567</li>
-                  </ul>
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">!</span>
+                    </div>
+                    <h4 className="font-semibold text-amber-800">重要提醒</h4>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-amber-700">
+                    <div className="flex items-start gap-2">
+                      <span className="text-amber-600 mt-0.5">1.</span>
+                      <span>请在转账备注中填写您的订单号</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-amber-600 mt-0.5">2.</span>
+                      <span>转账金额必须与订单总金额一致</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-amber-600 mt-0.5">3.</span>
+                      <span>确认收款后1-2个工作日内发货</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-amber-600 mt-0.5">4.</span>
+                      <span>客服电话：400-123-4567</span>
+                    </div>
+                  </div>
                 </div>
 
                 <input type="hidden" name="paymentMethod" value="bank_transfer" />
@@ -378,25 +424,28 @@ export default function CheckoutPage() {
               </div>
 
               {/* Submit Button */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full"
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg hover:shadow-xl transition-all duration-200 text-lg py-6"
                   size="lg"
                 >
                   {loading ? (
-                    <div className="flex items-center gap-2">
-                      <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      创建订单中...
+                    <div className="flex items-center gap-3">
+                      <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span className="font-semibold">创建订单中...</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
-                      <Truck className="h-4 w-4" />
-                      提交订单
+                    <div className="flex items-center gap-3">
+                      <Truck className="h-5 w-5" />
+                      <span className="font-semibold">提交订单并获取银行信息</span>
                     </div>
                   )}
                 </Button>
+                <p className="text-center text-sm text-gray-500 mt-3">
+                  点击提交后，您将获得订单号和详细的银行转账信息
+                </p>
               </div>
             </form>
           </div>
@@ -404,8 +453,13 @@ export default function CheckoutPage() {
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="sticky top-8">
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">订单摘要</h2>
+              <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <FileText className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-gray-900">订单摘要</h2>
+                </div>
                 
                 {/* Items */}
                 <div className="space-y-3 mb-4">
@@ -422,23 +476,27 @@ export default function CheckoutPage() {
                   ))}
                 </div>
                 
-                <div className="border-t border-gray-200 pt-4 space-y-2">
+                <div className="border-t border-gray-200 pt-4 space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">商品小计</span>
-                    <span className="text-gray-900">¥{subtotal.toFixed(2)}</span>
+                    <span className="text-gray-900 font-medium">¥{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">运费</span>
-                    <span className="text-gray-900">¥{shippingAmount.toFixed(2)}</span>
+                    <span className="text-green-600 font-medium">
+                      {shippingAmount === 0 ? '免费' : `¥${shippingAmount.toFixed(2)}`}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">税费</span>
-                    <span className="text-gray-900">¥{taxAmount.toFixed(2)}</span>
+                    <span className="text-gray-900 font-medium">¥{taxAmount.toFixed(2)}</span>
                   </div>
-                  <div className="border-t border-gray-200 pt-2">
-                    <div className="flex justify-between text-lg font-semibold">
-                      <span className="text-gray-900">总计</span>
-                      <span className="text-gray-900">¥{totalAmount.toFixed(2)}</span>
+                  <div className="border-t border-gray-200 pt-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xl font-bold text-gray-900">总计</span>
+                      <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                        ¥{totalAmount.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </div>

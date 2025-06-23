@@ -129,14 +129,7 @@ export function LoginForm({ onSuccess, redirectTo = '/' }: LoginFormProps) {
         disabled={isLoading}
         loading={isLoading}
       >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            登录中...
-          </>
-        ) : (
-          '登录'
-        )}
+        登录
       </Button>
 
       <div className="text-center">

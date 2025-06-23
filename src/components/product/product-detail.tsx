@@ -16,7 +16,7 @@ interface ProductDetailProps {
 export function ProductDetail({ product, className }: ProductDetailProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const { addItem, isLoading } = useCartStore();
+  const { addItem, isItemLoading } = useCartStore();
 
   const handleAddToCart = async () => {
     try {
@@ -196,11 +196,11 @@ export function ProductDetail({ product, className }: ProductDetailProps) {
         <div className="space-y-3">
           <Button
             onClick={handleAddToCart}
-            disabled={product.stockQuantity === 0 || isLoading}
+            disabled={product.stockQuantity === 0 || isItemLoading(product.id)}
             className="w-full h-12 text-lg"
             size="lg"
           >
-            {isLoading ? (
+            {isItemLoading(product.id) ? (
               <div className="flex items-center gap-2">
                 <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 添加中...

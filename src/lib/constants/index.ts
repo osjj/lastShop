@@ -40,8 +40,9 @@ export const API_ROUTES = {
     updateStatus: (id: string) => `/api/orders/${id}/status`,
   },
   payments: {
-    createIntent: '/api/payments/create-intent',
+    create: '/api/payments',
     confirm: '/api/payments/confirm',
+    createIntent: '/api/payments/create-intent',
   },
   upload: {
     images: '/api/upload/images',
@@ -58,6 +59,7 @@ export const PAGE_ROUTES = {
   checkout: '/checkout',
   orders: '/orders',
   order: (id: string) => `/orders/${id}`,
+  payment: (orderId: string) => `/payments/${orderId}`,
   profile: '/profile',
   admin: '/admin',
 } as const;

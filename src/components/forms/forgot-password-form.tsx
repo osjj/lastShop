@@ -5,7 +5,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth';
-import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/lib/validations/auth';
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormData,
+} from '@/lib/validations/auth';
 import { Loader2, Mail, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,7 +35,7 @@ export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
       setError(null);
       await forgotPassword(data.email);
       setIsSubmitted(true);
-      
+
       if (onSuccess) {
         onSuccess();
       }
@@ -43,36 +46,36 @@ export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
 
   if (isSubmitted) {
     return (
-      <div className="text-center space-y-6">
-        <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+      <div className="space-y-6 text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
           <Mail className="h-8 w-8 text-green-600" />
         </div>
-        
+
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">
+          <h3 className="text-foreground mb-2 text-lg font-semibold">
             重置邮件已发送
           </h3>
-          <p className="text-sm text-muted-foreground">
-            我们已向 <span className="font-medium">{getValues('email')}</span> 发送了密码重置链接。
-            请检查您的邮箱并点击链接重置密码。
+          <p className="text-muted-foreground text-sm">
+            我们已向 <span className="font-medium">{getValues('email')}</span>{' '}
+            发送了密码重置链接。 请检查您的邮箱并点击链接重置密码。
           </p>
         </div>
 
         <div className="space-y-4">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             没有收到邮件？请检查垃圾邮件文件夹，或者
             <button
               type="button"
               onClick={() => setIsSubmitted(false)}
-              className="text-primary hover:text-primary/80 font-medium ml-1"
+              className="text-primary hover:text-primary/80 ml-1 font-medium"
             >
               重新发送
             </button>
           </p>
-          
+
           <Link
             href="/login"
-            className="inline-flex items-center text-sm text-primary hover:text-primary/80 font-medium"
+            className="text-primary hover:text-primary/80 inline-flex items-center text-sm font-medium"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             返回登录
@@ -85,26 +88,29 @@ export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {error && (
-        <div className="p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+        <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-600">
           {error}
         </div>
       )}
 
-      <div className="text-center mb-6">
-        <p className="text-sm text-muted-foreground">
+      <div className="mb-6 text-center">
+        <p className="text-muted-foreground text-sm">
           输入您的邮箱地址，我们将向您发送密码重置链接。
         </p>
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+        <label
+          htmlFor="email"
+          className="text-foreground mb-2 block text-sm font-medium"
+        >
           邮箱地址
         </label>
         <input
           {...register('email')}
           type="email"
           id="email"
-          className="w-full px-3 py-2 border border-input rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+          className="border-input focus:ring-ring w-full rounded-md border px-3 py-2 shadow-sm focus:border-transparent focus:ring-2 focus:outline-none"
           placeholder="请输入您的邮箱"
           disabled={isLoading}
         />
@@ -119,20 +125,13 @@ export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
         disabled={isLoading}
         loading={isLoading}
       >
-        {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            发送中...
-          </>
-        ) : (
-          '发送重置链接'
-        )}
+        发送重置链接
       </Button>
 
       <div className="text-center">
         <Link
           href="/login"
-          className="inline-flex items-center text-sm text-primary hover:text-primary/80 font-medium"
+          className="text-primary hover:text-primary/80 inline-flex items-center text-sm font-medium"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           返回登录

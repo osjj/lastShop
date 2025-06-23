@@ -4,6 +4,10 @@ import { CartItem, CartState, Product } from '@/types';
 import { supabase } from '@/lib/supabase/client';
 
 interface CartStore extends CartState {
+  // Loading state for specific items
+  loadingItems: Set<string>;
+  loadingActions: Set<string>;
+  
   // Actions
   addItem: (product: Product, quantity?: number) => Promise<void>;
   updateItem: (itemId: string, quantity: number) => Promise<void>;
@@ -11,6 +15,10 @@ interface CartStore extends CartState {
   clearCart: () => Promise<void>;
   loadCart: () => Promise<void>;
   setLoading: (loading: boolean) => void;
+  setItemLoading: (productId: string, loading: boolean) => void;
+  setActionLoading: (actionId: string, loading: boolean) => void;
+  isItemLoading: (productId: string) => boolean;
+  isActionLoading: (actionId: string) => boolean;
   calculateTotals: () => void;
 }
 
@@ -23,10 +31,44 @@ export const useCartStore = create<CartStore>()(
         total: 0,
         itemCount: 0,
         isLoading: false,
+        loadingItems: new Set(),
+        loadingActions: new Set(),
 
         // Actions
         setLoading: (isLoading) =>
           set({ isLoading }, false, 'cart/setLoading'),
+
+        setItemLoading: (productId, loading) => {
+          const { loadingItems } = get();
+          const newLoadingItems = new Set(loadingItems);
+          if (loading) {
+            newLoadingItems.add(productId);
+          } else {
+            newLoadingItems.delete(productId);
+          }
+          set({ loadingItems: newLoadingItems }, false, 'cart/setItemLoading');
+        },
+
+        setActionLoading: (actionId, loading) => {
+          const { loadingActions } = get();
+          const newLoadingActions = new Set(loadingActions);
+          if (loading) {
+            newLoadingActions.add(actionId);
+          } else {
+            newLoadingActions.delete(actionId);
+          }
+          set({ loadingActions: newLoadingActions }, false, 'cart/setActionLoading');
+        },
+
+        isItemLoading: (productId) => {
+          const { loadingItems } = get();
+          return loadingItems.has(productId);
+        },
+
+        isActionLoading: (actionId) => {
+          const { loadingActions } = get();
+          return loadingActions.has(actionId);
+        },
 
         calculateTotals: () => {
           const { items } = get();
@@ -40,7 +82,7 @@ export const useCartStore = create<CartStore>()(
         },
 
         addItem: async (product, quantity = 1) => {
-          set({ isLoading: true }, false, 'cart/addItem/start');
+          get().setItemLoading(product.id, true);
 
           try {
             // Check if user is authenticated
@@ -106,9 +148,9 @@ export const useCartStore = create<CartStore>()(
               get().calculateTotals();
             }
 
-            set({ isLoading: false }, false, 'cart/addItem/success');
+            get().setItemLoading(product.id, false);
           } catch (error) {
-            set({ isLoading: false }, false, 'cart/addItem/error');
+            get().setItemLoading(product.id, false);
             throw error;
           }
         },
@@ -118,7 +160,7 @@ export const useCartStore = create<CartStore>()(
             return get().removeItem(itemId);
           }
 
-          set({ isLoading: true }, false, 'cart/updateItem/start');
+          get().setActionLoading(`update-${itemId}`, true);
 
           try {
             const {
@@ -149,15 +191,15 @@ export const useCartStore = create<CartStore>()(
               get().calculateTotals();
             }
 
-            set({ isLoading: false }, false, 'cart/updateItem/success');
+            get().setActionLoading(`update-${itemId}`, false);
           } catch (error) {
-            set({ isLoading: false }, false, 'cart/updateItem/error');
+            get().setActionLoading(`update-${itemId}`, false);
             throw error;
           }
         },
 
         removeItem: async (itemId) => {
-          set({ isLoading: true }, false, 'cart/removeItem/start');
+          get().setActionLoading(`remove-${itemId}`, true);
 
           try {
             const {
@@ -184,9 +226,9 @@ export const useCartStore = create<CartStore>()(
               get().calculateTotals();
             }
 
-            set({ isLoading: false }, false, 'cart/removeItem/success');
+            get().setActionLoading(`remove-${itemId}`, false);
           } catch (error) {
-            set({ isLoading: false }, false, 'cart/removeItem/error');
+            get().setActionLoading(`remove-${itemId}`, false);
             throw error;
           }
         },
@@ -277,6 +319,7 @@ export const useCartStore = create<CartStore>()(
           items: state.items,
           total: state.total,
           itemCount: state.itemCount,
+          // Don't persist loading states as they should be reset on page load
         }),
       }
     ),

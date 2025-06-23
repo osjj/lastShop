@@ -63,6 +63,12 @@ export interface Order {
   id: string;
   orderNumber: string;
   userId: string;
+  user?: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+  };
   status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
   paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded';
   paymentMethod?: string;
@@ -141,7 +147,7 @@ export interface PaginationMeta {
   hasPrev: boolean;
 }
 
-export interface PaginatedResponse<T> extends ApiResponse<T> {
+export interface PaginatedResponse<T> extends Omit<ApiResponse<any>, 'data'> {
   data: {
     items: T[];
     pagination: PaginationMeta;

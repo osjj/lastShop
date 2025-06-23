@@ -222,6 +222,15 @@ export default function OrdersPage() {
                       共 {order.items.length} 件商品
                     </div>
                     <div className="flex gap-3">
+                      {order.paymentStatus === 'pending' && (
+                        <Button size="sm" asChild>
+                          <Link href={PAGE_ROUTES.payment(order.id)}>
+                            <CreditCard className="h-4 w-4 mr-2" />
+                            立即支付
+                          </Link>
+                        </Button>
+                      )}
+                      
                       <Button variant="outline" size="sm" asChild>
                         <Link href={PAGE_ROUTES.order(order.id)}>
                           <Eye className="h-4 w-4 mr-2" />
@@ -229,7 +238,7 @@ export default function OrdersPage() {
                         </Link>
                       </Button>
                       
-                      {order.status === 'pending' && (
+                      {order.status === 'pending' && order.paymentStatus === 'pending' && (
                         <Button variant="outline" size="sm">
                           取消订单
                         </Button>

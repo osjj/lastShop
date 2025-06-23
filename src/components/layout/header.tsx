@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { UserDropdown } from '@/components/layout/user-dropdown';
 import { useAuthStore } from '@/store/auth';
 import { useCartStore } from '@/store/cart';
 import { ShoppingBag, ShoppingCart, User, LogOut, Menu, X } from 'lucide-react';
@@ -65,23 +66,7 @@ export function Header() {
                 <div className="w-16 h-4 bg-muted rounded animate-pulse" />
               </div>
             ) : isAuthenticated && user ? (
-              <div className="flex items-center space-x-4">
-                <div className="hidden sm:flex items-center space-x-2">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm">
-                    {user.firstName} {user.lastName}
-                  </span>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="flex items-center space-x-2"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span className="hidden sm:inline">退出</span>
-                </Button>
-              </div>
+              <UserDropdown />
             ) : (
               <div className="flex items-center space-x-4">
                 <Button variant="outline" size="sm" asChild>
@@ -156,18 +141,62 @@ export function Header() {
               
               {isAuthenticated && user && (
                 <div className="pt-4 border-t">
-                  <div className="flex items-center space-x-2 mb-4">
-                    <User className="h-4 w-4" />
-                    <span className="text-sm">
-                      {user.firstName} {user.lastName}
-                    </span>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <span className="text-white font-medium">
+                        {user.firstName?.[0] || user.email[0].toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900">
+                        {user.firstName && user.lastName 
+                          ? `${user.firstName} ${user.lastName}` 
+                          : '用户'
+                        }
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                    </div>
                   </div>
+                  
+                  <div className="space-y-2 mb-4">
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-2 p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <User className="h-4 w-4" />
+                      <span className="text-sm">个人资料</span>
+                    </Link>
+                    <Link
+                      href="/orders"
+                      className="flex items-center gap-2 p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <ShoppingBag className="h-4 w-4" />
+                      <span className="text-sm">我的订单</span>
+                    </Link>
+                    {user.role === 'admin' && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center gap-2 p-2 text-purple-700 hover:bg-purple-50 rounded-lg transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <User className="h-4 w-4" />
+                        <span className="text-sm">管理后台</span>
+                      </Link>
+                    )}
+                  </div>
+                  
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleLogout}
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
                     className="w-full"
                   >
+                    <LogOut className="h-4 w-4 mr-2" />
                     退出登录
                   </Button>
                 </div>

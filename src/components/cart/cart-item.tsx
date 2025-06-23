@@ -16,8 +16,7 @@ interface CartItemProps {
 }
 
 export function CartItem({ item, className }: CartItemProps) {
-  const { updateItem, removeItem, isLoading } = useCartStore();
-  const [updating, setUpdating] = useState(false);
+  const { updateItem, removeItem, isActionLoading } = useCartStore();
 
   const handleQuantityChange = async (newQuantity: number) => {
     if (newQuantity < 1 || newQuantity > item.product.stockQuantity) {
@@ -25,33 +24,30 @@ export function CartItem({ item, className }: CartItemProps) {
     }
 
     try {
-      setUpdating(true);
       await updateItem(item.id, newQuantity);
     } catch (error) {
       console.error('Failed to update item quantity:', error);
-    } finally {
-      setUpdating(false);
     }
   };
 
   const handleRemove = async () => {
     try {
-      setUpdating(true);
       await removeItem(item.id);
     } catch (error) {
       console.error('Failed to remove item:', error);
-    } finally {
-      setUpdating(false);
     }
   };
 
   const primaryImage = item.product.images?.[0] || '/placeholder-product.jpg';
   const subtotal = item.price * item.quantity;
+  const isUpdating = isActionLoading(`update-${item.id}`);
+  const isRemoving = isActionLoading(`remove-${item.id}`);
+  const isProcessing = isUpdating || isRemoving;
 
   return (
     <div className={cn(
       'flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-lg',
-      updating && 'opacity-50 pointer-events-none',
+      isProcessing && 'opacity-50 pointer-events-none',
       className
     )}>
       {/* Product Image */}
@@ -125,7 +121,7 @@ export function CartItem({ item, className }: CartItemProps) {
             variant="ghost"
             size="sm"
             onClick={() => handleQuantityChange(item.quantity - 1)}
-            disabled={item.quantity <= 1 || updating || isLoading}
+            disabled={item.quantity <= 1 || isProcessing}
             className="h-8 w-8 p-0"
           >
             <Minus className="h-3 w-3" />
@@ -139,7 +135,7 @@ export function CartItem({ item, className }: CartItemProps) {
             variant="ghost"
             size="sm"
             onClick={() => handleQuantityChange(item.quantity + 1)}
-            disabled={item.quantity >= item.product.stockQuantity || updating || isLoading}
+            disabled={item.quantity >= item.product.stockQuantity || isProcessing}
             className="h-8 w-8 p-0"
           >
             <Plus className="h-3 w-3" />
@@ -160,7 +156,7 @@ export function CartItem({ item, className }: CartItemProps) {
           variant="ghost"
           size="sm"
           onClick={handleRemove}
-          disabled={updating || isLoading}
+          disabled={isProcessing}
           className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
         >
           <Trash2 className="h-4 w-4" />
